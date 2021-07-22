@@ -33,7 +33,13 @@ async function getValidMedia(value, attribute, user) {
     );
 
     const ids = medias.map(getId).filter((v) => v !== null);
-    const entities = await strapi.query("file", "upload").find({ id_in: ids });
+    const names = medias.map(getName).filter((v) => v != null);
+    let entities = [];
+    if (ids && ids.length && ids.length > 0) {
+      entities = await strapi.query("file", "upload").find({ id_in: ids });
+    } else if (names && names.length && names.length > 0) {
+      entities = await strapi.query("file", "upload").find({ name_in: names });
+    }
 
     return [...uploadedFiles, ...entities.map(({ id }) => id)];
   } else {
@@ -45,7 +51,28 @@ async function getValidMedia(value, attribute, user) {
     }
 
     const id = getId(media);
-    const entity = await strapi.query("file", "upload").findOne({ id });
+    const name = getName(media);
+    console.log('media id: ', id);
+    console.log('media name: ', name);
+    let entity;
+    let entities;
+    if (id) {
+      entities = await strapi.query("file", "upload").find({ id });
+      console.log('found entities by id ', entities);
+      if (entities.length && entities.length != 1) {
+        return null;
+      } else {
+        entity = entities[0];
+      }
+    } else if (name) {
+      entities = await strapi.query("file", "upload").find({ name });
+      console.log('found entities by name ', entities);
+      if (entities.length && entities.length != 1) {
+        return null;
+      } else {
+        entity = entities[0];
+      }
+    }
     return entity ? entity.id : null;
   }
 }
