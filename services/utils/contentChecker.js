@@ -8,6 +8,10 @@ function getId(value) {
   return null;
 }
 
+function getName(value) {
+  return value != null && value.name ? value.name : null;
+}
+
 async function getValidRelations(value, attribute) {
   const { relationType, targetModel } = attribute;
   if (MANY_RELATIONS.includes(relationType)) {
