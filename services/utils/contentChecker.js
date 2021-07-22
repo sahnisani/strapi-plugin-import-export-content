@@ -56,13 +56,10 @@ async function getValidMedia(value, attribute, user) {
 
     const id = getId(media);
     const name = getName(media);
-    console.log('media id: ', id);
-    console.log('media name: ', name);
     let entity;
     let entities;
     if (id) {
       entities = await strapi.query("file", "upload").find({ id });
-      console.log('found entities by id ', entities);
       if (entities.length && entities.length != 1) {
         return null;
       } else {
@@ -70,7 +67,6 @@ async function getValidMedia(value, attribute, user) {
       }
     } else if (name) {
       entities = await strapi.query("file", "upload").find({ name });
-      console.log('found entities by name ', entities);
       if (entities.length && entities.length != 1) {
         return null;
       } else {
