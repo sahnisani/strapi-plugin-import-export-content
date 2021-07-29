@@ -17,12 +17,24 @@ async function getValidRelations(value, attribute) {
   if (MANY_RELATIONS.includes(relationType)) {
     const relations = Array.isArray(value) ? value : [value];
     const ids = relations.map(getId);
-    const entities = await strapi.query(targetModel).find({ id_in: ids });
+    const names = relations.map(getName);
+    let entities = [];
+    if (ids && ids.length && ids.length > 0) {
+      entities = await strapi.query(targetModel).find({ id_in: ids });
+    } else if (names && names.length && names.length > 0) {
+      entities = await strapi.query(targetModel).find({ name_in: names });
+    }
     return entities.map(({ id }) => id);
   } else {
     const relation = Array.isArray(value) ? value[0] : value;
     const id = getId(relation);
-    const entity = await strapi.query(targetModel).findOne({ id });
+    const name = getName(relation);
+    let entity = null;
+    if (id != null) {
+      entity = await strapi.query(targetModel).findOne({ id });
+    } else {
+      entity = await strapi.query(targetModel).findOne({ name });
+    }
     return entity ? entity.id : null;
   }
 }
