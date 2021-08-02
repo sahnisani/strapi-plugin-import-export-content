@@ -13,6 +13,9 @@ function getName(value) {
 }
 
 async function getValidRelations(value, attribute) {
+  if (!value) {
+    return null;
+  }
   const { relationType, targetModel } = attribute;
   if (MANY_RELATIONS.includes(relationType)) {
     const relations = Array.isArray(value) ? value : [value];
