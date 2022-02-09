@@ -96,7 +96,7 @@ async function getValidSingleComponent(value, attributes, user) {
   const mappedComponent = {};
   for (const attr in attributes) {
     const element = value[attr];
-    if (element) {
+    if (element || element === false) {
       let mappedElement = element;
       const { type, model, collection, plugin } = attributes[attr];
       if (plugin && plugin === "upload") {
