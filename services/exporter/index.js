@@ -9,7 +9,21 @@ async function getData(uid, options, userAbility) {
     });
 
   // Filter content by permissions
-  const query = permissionsManager.queryFrom({'_limit': 9999999, '_locale': 'all'}, PERMISSIONS.read);
+  const queryLocale = permissionsManager.queryFrom({'_limit': 1}, PERMISSIONS.read);
+
+  const checkItem = await strapi.entityService.find(
+    { params: queryLocale },
+    { model: uid }
+  );
+
+
+  let query;
+  if (checkItem.hasOwnProperty('_locale')) {
+    // Filter content by permissions
+    query = permissionsManager.queryFrom({'_limit': 9999999, '_locale': 'all'}, PERMISSIONS.read);
+  } else {
+    query = permissionsManager.queryFrom({'_limit': 9999999}, PERMISSIONS.read);
+  }
 
   const items = await strapi.entityService.find(
     { params: query },
