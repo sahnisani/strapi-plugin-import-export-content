@@ -1,6 +1,31 @@
 const importToCollectionType = async (uid, item) => {
   try {
-    await strapi.entityService.create({ data: item }, { model: uid });
+
+    let params = { name: item.name, _limit: 9999999 };
+    if (item.hasOwnProperty('locale')) {
+      params._locale = 'all';
+    }
+    const existingItemsWithSameName = await strapi.entityService.find({ params: params}, { model: uid });
+
+    let existingItemToUpdate;
+
+    item.localizations = []
+    if (Array.isArray(existingItemsWithSameName) && existingItemsWithSameName.length != 0) {
+      for await (const existingItem of existingItemsWithSameName) {
+        if (existingItem.locale == item.locale) {
+          existingItemToUpdate = existingItem;
+        } else {
+          item.localizations.push(existingLocalizationItem.id);
+        }
+      }
+    }
+
+    if (existingItemToUpdate) {
+      await strapi.entityService.update({ data: item , params: { id: existingItemToUpdate.id } }, { model: uid });
+    } else {
+      await strapi.entityService.create({ data: item }, { model: uid });
+    }
+
     // await strapi.query(uid).create(item);
     return true;
   } catch (error) {
