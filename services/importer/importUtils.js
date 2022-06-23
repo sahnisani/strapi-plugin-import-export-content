@@ -15,7 +15,7 @@ const importToCollectionType = async (uid, item) => {
         if (existingItem.locale == item.locale) {
           existingItemToUpdate = existingItem;
         } else {
-          item.localizations.push(existingLocalizationItem.id);
+          item.localizations.push(existingItem.id);
         }
       }
     }
