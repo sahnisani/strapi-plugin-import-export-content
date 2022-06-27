@@ -1,7 +1,14 @@
 const importToCollectionType = async (uid, item) => {
   try {
+    let params = { _limit: 9999999 };
+    if (item.hasOwnProperty('name')) {
+      params.name = item.name;
+    } else if (item.hasOwnProperty('Displayname')) {
+      params.Displayname = item.Displayname;
+    } else {
+      throw new Error("no name found for item to be imported");
+    }
 
-    let params = { name: item.name, _limit: 9999999 };
     if (item.hasOwnProperty('locale')) {
       params._locale = 'all';
     }
