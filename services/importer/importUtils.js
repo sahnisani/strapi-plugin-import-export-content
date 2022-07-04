@@ -1,9 +1,9 @@
 const importToCollectionType = async (uid, item) => {
   try {
     let params = { _limit: 9999999 };
-    if (item.hasOwnProperty('name')) {
+    if (item.hasOwnProperty('name') || item.hasOwnProperty('Name')) {
       params.name = item.name;
-    } else if (item.hasOwnProperty('Displayname')) {
+    } else if (item.hasOwnProperty('Displayname') || item.hasOwnProperty('displayname')) {
       params.Displayname = item.Displayname;
     } else {
       throw new Error("no name found for item to be imported");
