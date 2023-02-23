@@ -4,11 +4,11 @@ const importToCollectionType = async (uid, item) => {
     if (item.hasOwnProperty('name')) {
       params.name = item.name;
     } else if (item.hasOwnProperty('Name')) {
-      params.name = item.Name;
+      params.Name = item.Name;
     } else if (item.hasOwnProperty('Displayname')) {
       params.Displayname = item.Displayname;
     } else if (item.hasOwnProperty('displayname')) {
-      params.Displayname = item.displayname;
+      params.displayname = item.displayname;
     } else {
       throw new Error("no name found for item to be imported");
     }
